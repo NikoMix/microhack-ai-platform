@@ -1,0 +1,10 @@
+:root {
+  --sl-color-accent-low: #d7ecff;
+  --sl-color-accent: #1261a6;
+  --sl-color-accent-high: #12395c;
+  --sl-font: Aptos, Segoe UI, system-ui, sans-serif;
+}
+
+.hero img {
+  filter: drop-shadow(0 1rem 2rem rgb(18 97 166 / 18%));
+}
