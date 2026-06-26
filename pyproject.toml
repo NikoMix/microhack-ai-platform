@@ -56,6 +56,10 @@ telemetry = [
     "opentelemetry-instrumentation-fastapi>=0.50b0",
     "azure-monitor-opentelemetry>=1.6",
 ]
+# Custom Model Context Protocol (MCP) lab server (WS-AGENTS).
+mcp = [
+    "mcp>=1.2",
+]
 dev = [
     "ruff>=0.9",
     "mypy>=1.14",
@@ -141,7 +145,7 @@ mypy_path = "src"
 packages = ["aiplatform"]
 
 [[tool.mypy.overrides]]
-module = ["azure.*", "agent_framework.*"]
+module = ["azure.*", "agent_framework.*", "mcp.*", "opentelemetry.*", "sklearn.*"]
 ignore_missing_imports = true
 
 # ---------------------------------------------------------------------------

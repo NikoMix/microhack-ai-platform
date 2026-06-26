@@ -1,0 +1,7 @@
+# Code owners for the Module B TTT MicroHack.
+# Default owner for everything in the repo.
+*       @NikoMix
+
+# Keystone contract — change with care (powers modular inference & the migration lab).
+/src/aiplatform/inference/base.py   @NikoMix
+/src/aiplatform/config.py           @NikoMix
