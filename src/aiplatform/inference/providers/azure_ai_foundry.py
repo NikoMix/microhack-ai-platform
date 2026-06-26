@@ -74,7 +74,7 @@ class AzureAIFoundryProvider(BaseChatProvider):
                 response_format=response_format,
             )
         except Exception as exc:
-            LOGGER.warning("Azure AI Foundry chat completion failed", exc_info=exc)
+            LOGGER.warning("Azure AI Foundry chat completion failed: %s", exc)
             raise ProviderError(
                 "Azure AI Foundry chat completion failed",
                 provider=self.provider_name,
@@ -114,7 +114,7 @@ class AzureAIFoundryProvider(BaseChatProvider):
                 model=selected_model,
             )
         except Exception as exc:
-            LOGGER.warning("Azure AI Foundry embeddings failed", exc_info=exc)
+            LOGGER.warning("Azure AI Foundry embeddings failed: %s", exc)
             raise ProviderError(
                 "Azure AI Foundry embeddings failed",
                 provider=self.provider_name,

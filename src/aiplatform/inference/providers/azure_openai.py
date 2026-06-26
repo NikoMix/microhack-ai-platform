@@ -108,7 +108,7 @@ class AzureOpenAIProvider(BaseChatProvider):
                 response_format=response_format,
             )
         except Exception as exc:
-            LOGGER.warning("Azure OpenAI chat completion failed", exc_info=exc)
+            LOGGER.warning("Azure OpenAI chat completion failed: %s", exc)
             raise ProviderError(
                 "Azure OpenAI chat completion failed",
                 provider=self.provider_name,
@@ -146,7 +146,7 @@ class AzureOpenAIProvider(BaseChatProvider):
                     if content:
                         yield str(content)
         except Exception as exc:
-            LOGGER.warning("Azure OpenAI streaming completion failed", exc_info=exc)
+            LOGGER.warning("Azure OpenAI streaming completion failed: %s", exc)
             raise ProviderError(
                 "Azure OpenAI streaming completion failed",
                 provider=self.provider_name,
@@ -159,7 +159,7 @@ class AzureOpenAIProvider(BaseChatProvider):
         try:
             response = await self._embed_raw(texts, model=selected_model)
         except Exception as exc:
-            LOGGER.warning("Azure OpenAI embeddings failed", exc_info=exc)
+            LOGGER.warning("Azure OpenAI embeddings failed: %s", exc)
             raise ProviderError(
                 "Azure OpenAI embeddings failed",
                 provider=self.provider_name,

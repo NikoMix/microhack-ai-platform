@@ -87,7 +87,7 @@ class GitHubModelsProvider(BaseChatProvider):
                 response_format=response_format,
             )
         except Exception as exc:
-            LOGGER.warning("GitHub Models chat completion failed", exc_info=exc)
+            LOGGER.warning("GitHub Models chat completion failed: %s", exc)
             raise ProviderError(
                 "GitHub Models chat completion failed",
                 provider=self.provider_name,
@@ -125,7 +125,7 @@ class GitHubModelsProvider(BaseChatProvider):
                     if content:
                         yield str(content)
         except Exception as exc:
-            LOGGER.warning("GitHub Models streaming completion failed", exc_info=exc)
+            LOGGER.warning("GitHub Models streaming completion failed: %s", exc)
             raise ProviderError(
                 "GitHub Models streaming completion failed",
                 provider=self.provider_name,
@@ -138,7 +138,7 @@ class GitHubModelsProvider(BaseChatProvider):
         try:
             response = await self._embed_raw(texts, model=selected_model)
         except Exception as exc:
-            LOGGER.warning("GitHub Models embeddings failed", exc_info=exc)
+            LOGGER.warning("GitHub Models embeddings failed: %s", exc)
             raise ProviderError(
                 "GitHub Models embeddings failed",
                 provider=self.provider_name,
