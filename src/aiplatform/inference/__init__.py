@@ -18,6 +18,7 @@ from aiplatform.inference.base import (
     ToolDefinition,
     Usage,
 )
+from aiplatform.inference.factory import get_chat_provider
 
 __all__ = [
     "BaseChatProvider",
@@ -29,4 +30,5 @@ __all__ = [
     "ToolCall",
     "ToolDefinition",
     "Usage",
+    "get_chat_provider",
 ]
