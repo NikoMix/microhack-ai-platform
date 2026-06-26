@@ -148,6 +148,17 @@ packages = ["aiplatform"]
 module = ["azure.*", "agent_framework.*", "mcp.*", "opentelemetry.*", "sklearn.*"]
 ignore_missing_imports = true
 
+# numpy is an optional, dynamically-imported dependency (see rag/local.py, which
+# loads it via importlib and treats it as Any). Skip analysing its stubs: numpy
+# 2.x ships PEP 695 `type` syntax that the 3.11 target rejects, and we never rely
+# on its types statically. follow_imports_for_stubs is required so the skip also
+# applies to numpy's bundled .pyi stub files.
+[[tool.mypy.overrides]]
+module = ["numpy", "numpy.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+ignore_missing_imports = true
+
 # ---------------------------------------------------------------------------
 # pytest + coverage.
 # ---------------------------------------------------------------------------
@@ -168,6 +179,7 @@ source = ["aiplatform"]
 [tool.coverage.report]
 show_missing = true
 skip_covered = false
+fail_under = 90
 exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:", "raise NotImplementedError", "\\.\\.\\."]
 
 # ---------------------------------------------------------------------------
