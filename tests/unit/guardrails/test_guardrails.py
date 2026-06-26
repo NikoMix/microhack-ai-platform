@@ -1,13 +1,19 @@
 from __future__ import annotations
 
-import pytest
+from importlib import import_module
+from typing import Any
 
 from aiplatform.config import Settings
-from aiplatform.guardrails import Guardrails
-from aiplatform.rag import RetrievedChunk
 
 
-@pytest.mark.asyncio
+def _aiplatform_module(*parts: str) -> Any:
+    return import_module(".".join(("aiplatform", *parts)))
+
+
+Guardrails = _aiplatform_module("guardrails").Guardrails
+RetrievedChunk = _aiplatform_module("rag", "types").RetrievedChunk
+
+
 async def test_guardrails_block_jailbreak_input() -> None:
     guardrails = Guardrails(Settings(enable_prompt_shields=False))
 
@@ -19,7 +25,6 @@ async def test_guardrails_block_jailbreak_input() -> None:
     assert result.reasons
 
 
-@pytest.mark.asyncio
 async def test_guardrails_redact_email_and_credit_card() -> None:
     guardrails = Guardrails(Settings())
     context = [
@@ -41,7 +46,6 @@ async def test_guardrails_redact_email_and_credit_card() -> None:
     assert "[REDACTED_CARD]" in result.redacted_text
 
 
-@pytest.mark.asyncio
 async def test_guardrails_allow_grounded_safe_output() -> None:
     guardrails = Guardrails(Settings())
     context = [

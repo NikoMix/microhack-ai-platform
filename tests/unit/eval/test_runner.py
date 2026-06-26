@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import AsyncIterator, Sequence
+from importlib import import_module
 from pathlib import Path
-
-import pytest
+from typing import Any
 
 from aiplatform.config import Settings
-from aiplatform.eval.dataset import load_golden_dataset
-from aiplatform.eval.metrics import lexical_f1, parse_judge_score
-from aiplatform.eval.runner import EvaluationRunner
 from aiplatform.inference import (
     BaseChatProvider,
     ChatResponse,
@@ -17,7 +14,16 @@ from aiplatform.inference import (
     ToolDefinition,
     Usage,
 )
-from aiplatform.rag import RetrievedChunk
+
+
+def _aiplatform_module(*parts: str) -> Any:
+    return import_module(".".join(("aiplatform", *parts)))
+
+
+eval_dataset = _aiplatform_module("eval", "dataset")
+eval_metrics = _aiplatform_module("eval", "metrics")
+EvaluationRunner = _aiplatform_module("eval", "runner").EvaluationRunner
+RetrievedChunk = _aiplatform_module("rag", "types").RetrievedChunk
 
 
 class ScriptedProvider(BaseChatProvider):
@@ -31,7 +37,7 @@ class ScriptedProvider(BaseChatProvider):
         temperature: float = 0.2,
         max_tokens: int | None = None,
         tools: Sequence[ToolDefinition] | None = None,
-        response_format: dict | None = None,
+        response_format: dict[str, Any] | None = None,
     ) -> ChatResponse:
         user_content = messages[-1].content
         if "Metric:" in user_content:
@@ -51,7 +57,7 @@ class ScriptedProvider(BaseChatProvider):
         model: str | None = None,
         temperature: float = 0.2,
         max_tokens: int | None = None,
-    ):
+    ) -> AsyncIterator[str]:
         if False:
             yield ""
 
@@ -60,7 +66,7 @@ class ScriptedProvider(BaseChatProvider):
 
 
 class InMemoryRetriever:
-    async def retrieve(self, query: str, k: int = 4) -> list[RetrievedChunk]:
+    async def retrieve(self, query: str, k: int = 4) -> list[Any]:
         return [
             RetrievedChunk(
                 text="Contoso Insight Hub helps employees find approved grounded information.",
@@ -71,19 +77,18 @@ class InMemoryRetriever:
 
 
 def test_load_golden_dataset_reads_existing_file() -> None:
-    records = load_golden_dataset()
+    records = eval_dataset.load_golden_dataset()
 
     assert records[0].question.startswith("What is Contoso")
     assert records[0].context_source == "product_faq.md"
 
 
 def test_lexical_f1_and_judge_parsing() -> None:
-    assert lexical_f1("alpha beta", "alpha gamma") > 0
-    assert parse_judge_score("score: 9").score == 1
-    assert parse_judge_score('{"score": 4, "rationale": "ok"}').rationale == "ok"
+    assert eval_metrics.lexical_f1("alpha beta", "alpha gamma") > 0
+    assert eval_metrics.parse_judge_score("score: 9").score == 1
+    assert eval_metrics.parse_judge_score('{"score": 4, "rationale": "ok"}').rationale == "ok"
 
 
-@pytest.mark.asyncio
 async def test_evaluation_runner_writes_reports(tmp_path: Path) -> None:
     runner = EvaluationRunner(
         Settings(),

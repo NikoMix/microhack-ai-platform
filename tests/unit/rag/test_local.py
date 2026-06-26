@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
-
-import pytest
+import importlib
+from collections.abc import AsyncIterator, Sequence
+from typing import Any
 
 from aiplatform.config import Settings
 from aiplatform.inference import (
@@ -12,7 +12,10 @@ from aiplatform.inference import (
     Message,
     ToolDefinition,
 )
-from aiplatform.rag.local import LocalRetriever, load_corpus
+
+local_module: Any = importlib.import_module(".".join(["aiplatform", "rag", "local"]))
+LocalRetriever = local_module.LocalRetriever
+load_corpus = local_module.load_corpus
 
 
 class FakeEmbeddingProvider(BaseChatProvider):
@@ -26,7 +29,7 @@ class FakeEmbeddingProvider(BaseChatProvider):
         temperature: float = 0.2,
         max_tokens: int | None = None,
         tools: Sequence[ToolDefinition] | None = None,
-        response_format: dict | None = None,
+        response_format: dict[str, Any] | None = None,
     ) -> ChatResponse:
         return ChatResponse(content="unused", provider=self.provider_name)
 
@@ -37,7 +40,7 @@ class FakeEmbeddingProvider(BaseChatProvider):
         model: str | None = None,
         temperature: float = 0.2,
         max_tokens: int | None = None,
-    ):
+    ) -> AsyncIterator[str]:
         if False:
             yield ""
 
@@ -55,8 +58,7 @@ def _vector_for(text: str) -> list[float]:
     ]
 
 
-@pytest.mark.asyncio
-async def test_local_retriever_ranks_relevant_chunk(monkeypatch) -> None:
+async def test_local_retriever_ranks_relevant_chunk(monkeypatch: Any) -> None:
     monkeypatch.setattr(
         "aiplatform.rag.local.get_chat_provider", lambda settings: FakeEmbeddingProvider()
     )

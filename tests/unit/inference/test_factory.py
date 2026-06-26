@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from aiplatform.config import InferenceProvider, Settings
 from aiplatform.inference import get_chat_provider
 from aiplatform.inference.providers.azure_ai_foundry import AzureAIFoundryProvider
@@ -25,7 +27,7 @@ def test_factory_selects_azure_openai_with_key() -> None:
     assert isinstance(provider, AzureOpenAIProvider)
 
 
-def test_factory_selects_foundry(monkeypatch) -> None:
+def test_factory_selects_foundry(monkeypatch: Any) -> None:
     monkeypatch.setattr(AzureAIFoundryProvider, "__init__", lambda self, settings: None)
 
     provider = get_chat_provider(

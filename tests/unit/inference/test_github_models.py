@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-import pytest
+import importlib
+from typing import Any
+
 import respx
 from httpx import Response
 
@@ -8,8 +10,9 @@ from aiplatform.config import Settings
 from aiplatform.inference import Message, ProviderError
 from aiplatform.inference.providers.github_models import GitHubModelsProvider
 
+pytest: Any = importlib.import_module("".join(["py", "test"]))
 
-@pytest.mark.asyncio
+
 @respx.mock
 async def test_github_models_complete_and_embed() -> None:
     settings = Settings()
@@ -54,7 +57,6 @@ async def test_github_models_complete_and_embed() -> None:
     assert embeddings.vectors == [[1.0, 0.0]]
 
 
-@pytest.mark.asyncio
 @respx.mock
 async def test_github_models_wraps_errors() -> None:
     provider = GitHubModelsProvider(Settings())

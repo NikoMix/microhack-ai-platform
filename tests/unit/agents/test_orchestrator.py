@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator, Sequence
 
-import pytest
-
 from aiplatform.agents.orchestrator import AgentOrchestrator
 from aiplatform.agents.tools.base import AgentTool
 from aiplatform.config import Settings
@@ -74,7 +72,6 @@ class ScriptedProvider(BaseChatProvider):
         self.closed = True
 
 
-@pytest.mark.asyncio
 async def test_orchestrator_runs_full_tool_calling_turn() -> None:
     provider = ScriptedProvider()
 

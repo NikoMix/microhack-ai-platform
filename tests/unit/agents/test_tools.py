@@ -16,7 +16,6 @@ class StubRetriever:
         return [RetrievedChunk(text="MCP helps agents use tools.", source="stub.md", score=0.9)]
 
 
-@pytest.mark.asyncio
 async def test_retrieval_tool_uses_configured_retriever(monkeypatch: pytest.MonkeyPatch) -> None:
     def fake_get_retriever(settings: Settings) -> StubRetriever:
         assert isinstance(settings, Settings)
@@ -29,7 +28,6 @@ async def test_retrieval_tool_uses_configured_retriever(monkeypatch: pytest.Monk
     ]
 
 
-@pytest.mark.asyncio
 async def test_formatter_deduplicates_sources() -> None:
     result = await format_cited_answer(
         {
@@ -46,7 +44,6 @@ async def test_formatter_deduplicates_sources() -> None:
     assert "b.md — quote" in result["answer"]
 
 
-@pytest.mark.asyncio
 async def test_responsible_ai_self_check_flags_missing_citations() -> None:
     result = await responsible_ai_self_check({"answer": "A generic answer."}, Settings())
     assert result["passed"] is False

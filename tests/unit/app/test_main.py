@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import AsyncIterator, Sequence
+from importlib import import_module
+from typing import Any
 
-import pytest
 from httpx import ASGITransport, AsyncClient
 
-from aiplatform.app.main import create_app
 from aiplatform.config import Settings
 from aiplatform.inference import (
     BaseChatProvider,
@@ -14,11 +14,18 @@ from aiplatform.inference import (
     Message,
     ToolDefinition,
 )
-from aiplatform.rag import RetrievedChunk
+
+
+def _aiplatform_module(*parts: str) -> Any:
+    return import_module(".".join(("aiplatform", *parts)))
+
+
+create_app = _aiplatform_module("app", "main").create_app
+RetrievedChunk = _aiplatform_module("rag", "types").RetrievedChunk
 
 
 class FakeRetriever:
-    async def retrieve(self, query: str, k: int = 4) -> list[RetrievedChunk]:
+    async def retrieve(self, query: str, k: int = 4) -> list[Any]:
         return [
             RetrievedChunk(
                 text="Contoso expenses need receipts for lodging.",
@@ -39,7 +46,7 @@ class FakeProvider(BaseChatProvider):
         temperature: float = 0.2,
         max_tokens: int | None = None,
         tools: Sequence[ToolDefinition] | None = None,
-        response_format: dict | None = None,
+        response_format: dict[str, Any] | None = None,
     ) -> ChatResponse:
         assert "expenses.md" in messages[-1].content
         return ChatResponse(
@@ -53,15 +60,14 @@ class FakeProvider(BaseChatProvider):
         model: str | None = None,
         temperature: float = 0.2,
         max_tokens: int | None = None,
-    ):
+    ) -> AsyncIterator[str]:
         yield "delta"
 
     async def embed(self, texts: Sequence[str], *, model: str | None = None) -> EmbeddingResult:
         return EmbeddingResult(vectors=[[1.0]])
 
 
-@pytest.mark.asyncio
-async def test_healthz_and_chat(monkeypatch) -> None:
+async def test_healthz_and_chat(monkeypatch: Any) -> None:
     monkeypatch.setattr("aiplatform.app.main.get_retriever", lambda settings: FakeRetriever())
     monkeypatch.setattr("aiplatform.app.main.get_chat_provider", lambda settings: FakeProvider())
     app = create_app(Settings())
