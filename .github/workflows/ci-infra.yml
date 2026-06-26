@@ -1,0 +1,52 @@
+name: Infrastructure CI
+
+on:
+  push:
+    paths:
+      - "infra/**"
+      - "ps-rule.yaml"
+      - ".ps-rule/**"
+      - ".github/workflows/ci-infra.yml"
+  pull_request:
+    paths:
+      - "infra/**"
+      - "ps-rule.yaml"
+      - ".ps-rule/**"
+      - ".github/workflows/ci-infra.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: infra-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Bicep and PSRule
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Build Bicep
+        run: |
+          az bicep install
+          az bicep build --file infra/main.bicep
+
+      - name: PSRule for Azure
+        uses: microsoft/ps-rule@v2
+        with:
+          modules: PSRule.Rules.Azure
+          inputPath: infra
+          option: ps-rule.yaml
+          outputFormat: NUnit3
+          outputPath: reports/ps-rule-results.xml
+
+      - name: Upload PSRule results
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: ps-rule-results
+          path: reports/ps-rule-results.xml
+          if-no-files-found: ignore

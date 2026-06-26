@@ -1,0 +1,27 @@
+configuration:
+  AZURE_BICEP_FILE_EXPANSION: true
+  AZURE_PARAMETER_FILE_EXPANSION: true
+  AZURE_BICEP_PARAMS_FILE_EXPANSION: true
+  AZURE_RESOURCE_GROUP: rg-contoso-ai-microhack
+  AZURE_SUBSCRIPTION: 00000000-0000-0000-0000-000000000000
+
+include:
+  module:
+    - PSRule.Rules.Azure
+
+input:
+  pathIgnore:
+    - docs/**
+    - src/**
+    - .venv/**
+
+output:
+  culture:
+    - en-US
+
+rule:
+  exclude:
+    # The MicroHack intentionally uses public endpoints for a 1-day workshop.
+    - Azure.AI.PublicAccess
+    - Azure.Storage.Firewall
+    - Azure.Search.PublicAccess

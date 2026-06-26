@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: MicroHack documentation
+    url: https://nikomix.github.io/microhack-ai-platform
+    about: Check the published trainer and learner guidance first.
