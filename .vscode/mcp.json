@@ -1,0 +1,20 @@
+{
+  "servers": {
+    "azure": {
+      "command": "npx",
+      "args": ["-y", "@azure/mcp@latest", "server", "start"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "microsoft-learn": {
+      "command": "npx",
+      "args": ["-y", "microsoft.docs.mcp"]
+    },
+    "contoso-module-b-lab": {
+      "command": "python",
+      "args": ["-m", "aiplatform.mcp_server"]
+    }
+  }
+}
