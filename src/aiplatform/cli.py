@@ -9,11 +9,13 @@ from typing import NoReturn
 
 import uvicorn
 from rich.console import Console
+from rich.panel import Panel
 from rich.table import Table
 
 from aiplatform.app.main import create_app
 from aiplatform.config import get_settings
 from aiplatform.inference import Message, get_chat_provider
+from aiplatform.inference.base import ProviderError
 from aiplatform.rag import get_retriever, ingest
 
 LOGGER = logging.getLogger(__name__)
@@ -24,21 +26,47 @@ def main() -> None:
     """Run the ``aiplatform`` command-line interface."""
     parser = _build_parser()
     args = parser.parse_args()
-    logging.basicConfig(level=logging.INFO)
-    if args.command == "chat":
-        asyncio.run(_chat(args.prompt))
-    elif args.command == "ingest":
-        asyncio.run(_ingest())
-    elif args.command == "providers":
-        _providers()
-    elif args.command == "serve":
-        _serve(args.host, args.port)
-    else:
-        parser.print_help()
+    logging.basicConfig(level=logging.INFO if getattr(args, "verbose", False) else logging.WARNING)
+    # Quiet per-request HTTP client chatter regardless of verbosity.
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("azure.core.pipeline.policies.http_logging_policy").setLevel(logging.WARNING)
+    try:
+        if args.command == "chat":
+            asyncio.run(_chat(args.prompt))
+        elif args.command == "ingest":
+            asyncio.run(_ingest())
+        elif args.command == "providers":
+            _providers()
+        elif args.command == "serve":
+            _serve(args.host, args.port)
+        else:
+            parser.print_help()
+    except ProviderError as exc:
+        _print_provider_error(exc)
+        raise SystemExit(2) from exc
+
+
+def _print_provider_error(exc: ProviderError) -> None:
+    """Render a friendly, actionable panel instead of a raw traceback."""
+    CONSOLE.print(
+        Panel(
+            f"{exc}\n\n"
+            "The assistant could not reach an inference provider. Set GITHUB_TOKEN for "
+            "the zero-cost GitHub Models path, or configure an Azure provider via "
+            "INFERENCE_PROVIDER plus its endpoint and credential. See Lab 0 for setup.",
+            title="Inference provider unavailable",
+            border_style="red",
+        )
+    )
 
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="aiplatform", description="Contoso AI Assistant CLI")
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Show INFO-level logs (useful for demos and troubleshooting).",
+    )
     subparsers = parser.add_subparsers(dest="command")
     chat_parser = subparsers.add_parser("chat", help="Ask one grounded question")
     chat_parser.add_argument("prompt", help="Question to answer")
