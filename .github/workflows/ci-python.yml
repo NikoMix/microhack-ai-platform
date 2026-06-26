@@ -42,7 +42,7 @@ jobs:
           enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --extra dev --extra azure --extra eval --extra safety --extra telemetry
+        run: uv sync --all-extras
 
       - name: Ruff format
         run: uv run ruff format --check .
