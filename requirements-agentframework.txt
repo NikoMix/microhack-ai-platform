@@ -1,0 +1,11 @@
+# Microsoft Agent Framework — OPTIONAL "latest features" showcase (Lab 4 stretch).
+#
+# This is a PREVIEW package and is intentionally kept OUT of the core uv.lock so it
+# can never destabilise the stable classroom build. Install it on demand into the
+# existing virtual environment:
+#
+#   uv pip install -r requirements-agentframework.txt --prerelease=allow
+#
+# The reference app degrades gracefully if it is not installed: the local agent
+# runtime (aiplatform.agents) is the default and requires none of these packages.
+agent-framework-azure-ai
