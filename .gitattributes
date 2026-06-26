@@ -1,0 +1,46 @@
+# Normalise line endings for deterministic builds across Windows/Linux CI.
+* text=auto eol=lf
+
+# Explicitly LF for source/text the toolchain runs on Linux runners.
+*.py    text eol=lf
+*.pyi   text eol=lf
+*.md    text eol=lf
+*.mdx   text eol=lf
+*.txt   text eol=lf
+*.json  text eol=lf
+*.jsonc text eol=lf
+*.jsonl text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.toml  text eol=lf
+*.cfg   text eol=lf
+*.ini   text eol=lf
+*.bicep text eol=lf
+*.bicepparam text eol=lf
+*.mjs   text eol=lf
+*.cjs   text eol=lf
+*.js    text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.css   text eol=lf
+*.html  text eol=lf
+*.sh    text eol=lf
+.gitattributes text eol=lf
+.gitignore     text eol=lf
+.editorconfig  text eol=lf
+
+# Windows-native scripts keep CRLF.
+*.ps1   text eol=crlf
+*.psm1  text eol=crlf
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# Binary assets (no normalisation).
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
