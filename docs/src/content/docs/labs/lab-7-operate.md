@@ -17,8 +17,8 @@ Create operational documentation and sign-off artifacts for running Contoso AI A
 
 ## Prerequisites
 
-- Lab 6 validation results.
-- Lab 3 Well-Architected findings.
+- Lab 6 validation results, including the post-deployment WAR (Operational Excellence) and customer sign-off.
+- Lab 3 pre-deployment Well-Architected findings.
 - Lab 5 deployment plan.
 
 ## Zero-cost GitHub Models path
@@ -38,7 +38,7 @@ Create operational documentation and sign-off artifacts for running Contoso AI A
 ## Azure path
 
 1. Record Azure operational tasks: alert review, model quota, cost monitoring, Key Vault rotation, incident response, access reviews, and release cadence.
-2. Include post-deployment Azure Well-Architected Operational Excellence review actions from Lab 3.
+2. Include the post-deployment Well-Architected Operational Excellence review actions from Lab 6 (the post-deployment WAR produced for B.4.1). Carry them into the ongoing operations backlog.
 3. Verify teardown or ongoing ownership:
 
    ```powershell

@@ -43,14 +43,17 @@ This page proves that the training website covers all seven Module B controls fo
 | B.3.1 | Include Azure deployment command | Lab 5 uses `pwsh infra/scripts/deploy.ps1` for Bicep deployment. | Deployment command output or planned execution note. |
 | B.3.1 | Include teardown | Lab 5 uses `pwsh infra/scripts/teardown.ps1` where Azure resources are created. | Teardown owner and command evidence. |
 | B.3.1 | Include Azure AI Foundry production settings | Lab 5 records `INFERENCE_PROVIDER=azure_ai_foundry` and `AZURE_AI_FOUNDRY_PROJECT_ENDPOINT`. | Configuration and deployment settings. |
-| B.4.1 | Validate functional behavior | Lab 6 runs representative chat prompts and acceptance checks. | Test case results. |
-| B.4.1 | Validate groundedness and safety | Lab 6 records grounded-answer checks, safety failures, and remediation. | Groundedness and safety table. |
-| B.4.1 | Run LLM-as-judge evaluation | Lab 6 uses `python -m aiplatform.eval run`. | Evaluation report summary. |
-| B.4.1 | Validate Azure path | Lab 6 repeats validation after Azure AI Foundry provider swap. | Azure validation notes and telemetry. |
-| B.4.2 | Create post-deployment documentation | Lab 7 documents operational tasks, metrics, incident response, and support handoff. | `B42_PostDeploymentDocs.md`. |
-| B.4.2 | Include sign-off | Lab 7 requires business, technical, RAI, and operations owner sign-off. | Sign-off table. |
-| B.4.2 | Include SOPs | Lab 7 requires SOPs for token rotation, index rebuild, prompt updates, defect triage, incident response, and support handoff. | SOP section. |
-| B.4.2 | Include post-deploy WAR Operational Excellence | Lab 7 imports Lab 3 Operational Excellence actions into the operations backlog. | Post-deploy WAR Operational Excellence actions. |
+| B.4.1 | Test and validate across the CAF best-practice areas (application design, monitoring, APM, code deployment, infrastructure provisioning, testing) | Lab 6 runs functional, groundedness, safety, and performance checks and maps them to the CAF areas. | Test results and CAF-area coverage in `B41_ValidationTesting.md`. |
+| B.4.1 | Run LLM-as-judge groundedness and safety evaluation | Lab 6 runs `python -m aiplatform.eval run` and records groundedness, safety, and remediation. | Evaluation report summary. |
+| B.4.1 | Obtain written customer sign-off that the solution met expectations | Lab 6 captures a written acceptance decision and named customer representative sign-off. | Customer sign-off block in `B41_ValidationTesting.md`. |
+| B.4.1 | Provide a post-deployment Well-Architected Review on the Operational Excellence pillar | Lab 6 runs a post-deployment WAR (Operational Excellence) after go-live, distinct from the pre-deployment WAR in Lab 3. | Post-deployment WAR (Operational Excellence) export in `B41_ValidationTesting.md`. |
+| B.4.1 | Show a process to evaluate and improve the architecture | Lab 6 turns findings into a remediation backlog with at least one applied example. | Remediation cycle notes. |
+| B.4.1 | Validate the Azure path | Lab 6 repeats validation after the Azure AI Foundry provider swap. | Azure validation notes and telemetry. |
+| B.4.2 | Document decisions, architectural designs, and procedures as-built | Lab 7 produces as-built documentation referencing the final HLD/LLD, resource inventory, identity, and monitoring. | As-built section in `B42_PostDeploymentDocs.md`. |
+| B.4.2 | Provide SOPs for the BAU operations team | Lab 7 writes SOPs for incident response, scaling, key rotation and identity, model and version updates, cost monitoring, backup and DR, and on-call. | SOP and runbook section. |
+| B.4.2 | Provide as-built plus acceptance documentation | Lab 7 captures BAU acceptance with a named owner, documents received, and an explicit decision. | BAU acceptance block. |
+| B.4.2 | Include the project plan, deployment sequence, and architecture diagrams | Lab 7 references the deployment sequence from Lab 5 and the as-built architecture diagrams. | Project plan and diagram references. |
+| B.4.2 | Carry post-deployment WAR Operational Excellence actions into operations | Lab 7 imports the Lab 6 post-deployment WAR Operational Excellence actions into the ongoing operations backlog. | Operations backlog actions sourced from B.4.1. |
 | B.4.2 | Include ongoing Azure operations | Lab 7 covers alert review, model quota, cost monitoring, Key Vault rotation, incident response, access review, and release cadence. | Operations calendar and owners. |
 
 ## Evidence template links

@@ -63,12 +63,26 @@ Run validation testing and record whether Contoso AI Assistant meets acceptance 
 2. Add Azure validation evidence: telemetry, content filtering configuration, model deployment, identity, and endpoint health.
 3. Compare output quality, latency, safety, and cost between GitHub Models and Azure provider paths.
 
+## Post-deployment review and sign-off (required for B.4.1)
+
+These artefacts are mandatory audit evidence for B.4.1. Do not skip them — they close the validation loop.
+
+1. Run a **post-deployment** Well-Architected Review on the **Operational Excellence** pillar after the workload is live. This is distinct from the pre-deployment WAR produced in Lab 3.
+   - Use the WAR Operational Excellence pillar, or the Azure Well-Architected AI workload Assessment.
+   - Record the customer name and the go-live date on the export so the timing is verifiable.
+2. Map the testing evidence to the Cloud Adoption Framework best-practice areas: application design, monitoring, application performance management, code deployment, infrastructure provisioning, and testing.
+3. Capture a **written** customer sign-off that the solution met expectations, including the named customer representative, the acceptance decision, and the date. Verbal sign-off is not accepted.
+4. Record a process to evaluate and improve the architecture, with at least one remediation applied to an underperforming area.
+
 ## Checkpoints
 
 - Evaluation report exists and is reviewed by a human.
 - Safety and groundedness failures are not hidden.
 - Defects have owners and acceptance criteria.
 - Azure validation includes operational telemetry where available.
+- Post-deployment WAR uses the Operational Excellence pillar and is dated after go-live.
+- Written customer sign-off is captured with a named representative.
+- Testing evidence maps to the CAF best-practice areas.
 
 ## Evidence to capture
 
