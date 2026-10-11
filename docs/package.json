@@ -10,12 +10,12 @@
     "lint": "markdownlint-cli2 \"src/**/*.{md,mdx}\""
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.41.1",
+    "@astrojs/starlight": "^0.42.6",
     "astro": "^7.0.3",
     "sharp": "^0.35.2"
   },
   "devDependencies": {
-    "markdownlint-cli2": "^0.22.1"
+    "markdownlint-cli2": "^0.23.3"
   },
   "overrides": {
     "markdown-it": "^14.2.0",
