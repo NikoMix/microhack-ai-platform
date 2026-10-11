@@ -1,0 +1,80 @@
+---
+title: AI Platform TTT MicroHack
+description: One-day classroom-led Train-the-Trainer MicroHack for AI Platform on Microsoft Azure Module B.
+template: splash
+hero:
+  tagline: Train-the-Trainer content for the AI Platform on Microsoft Azure Specialization.
+  actions:
+    - text: Start Lab 0
+      link: /microhack-ai-platform/labs/lab-0-setup/
+      variant: primary
+    - text: View Module B Map
+      link: /microhack-ai-platform/reference/module-b-mapping/
+      variant: secondary
+---
+
+This training website equips instructors to deliver a one-day, classroom-led MicroHack using the **Contoso AI Assistant** reference application: an agentic RAG FastAPI app with modular inference and a configuration-only path from GitHub Models to Azure AI Foundry.
+
+## Who this is for
+
+- Trainers preparing a Train-the-Trainer (TTT) delivery.
+- Coaches validating pupil evidence for the AI Platform on Microsoft Azure Specialization.
+- Technical leads who need a repeatable Module B readiness, design, deployment, validation, and operations workshop.
+
+## One-day agenda
+
+| Time | Segment | Outcome |
+| --- | --- | --- |
+| 09:00 | Kickoff and trainer framing | Explain Module B outcomes, cost paths, and evidence expectations. |
+| 09:20 | Lab 0 setup | Verify environment, GitHub Models, Copilot, and MCP access. |
+| 09:55 | Lab 1 assess | Build portfolio/customer assessment evidence for B.1.1. |
+| 10:40 | Break | Reset room and check blockers. |
+| 10:55 | Lab 2 design RAI | Create solution design and Responsible AI evidence for B.2.1. |
+| 11:40 | Lab 3 Well-Architected | Review architecture across Azure Well-Architected pillars for B.2.2. |
+| 12:25 | Lunch | Trainer discussion and Q&A. |
+| 13:10 | Lab 4 PoC | Run the GitHub Models PoC and agent/MCP demos for B.2.3. |
+| 14:05 | Lab 5 deploy | Plan and execute Azure deployment for B.3.1. |
+| 14:55 | Break | Evidence checkpoint. |
+| 15:10 | Lab 6 validate | Run functional, RAI, and LLM-as-judge validation for B.4.1. |
+| 15:55 | Lab 7 operate | Produce post-deployment operations and SOPs for B.4.2. |
+| 16:35 | Lab X migration | Swap providers to Azure AI Foundry with no app code changes. |
+| 17:10 | Wrap | Grade evidence, discuss facilitation, and close. |
+
+## Lab to Module B map
+
+| Lab | Module B control | Evidence template |
+| --- | --- | --- |
+| Lab 1 | B.1.1 Assess AI solution opportunities | `B11_PortfolioAssessment.md` |
+| Lab 2 | B.2.1 Design AI solution with Responsible AI | `B21_SolutionDesign.md` |
+| Lab 3 | B.2.2 Apply Azure Well-Architected Review | `B22_WellArchitectedReview.md` |
+| Lab 4 | B.2.3 Build PoC or pilot | `B23_PoCPilot.md` |
+| Lab 5 | B.3.1 Prepare deployment plan | `B31_DeploymentPlan.md` |
+| Lab 6 | B.4.1 Validate and test | `B41_ValidationTesting.md` |
+| Lab 7 | B.4.2 Post-deployment documentation and operations | `B42_PostDeploymentDocs.md` |
+| Lab X | Cross-cutting Azure migration | Updates B.2.1, B.2.3, B.3.1, and B.4.2 evidence |
+
+## Prerequisites
+
+- Node 24 and npm for the website.
+- Python 3.12 managed with `uv` for the reference app.
+- GitHub account with Copilot access, GitHub Models access, and a GitHub PAT stored as `GITHUB_TOKEN`.
+- Optional Azure subscription with permissions for Azure AI Foundry, Azure OpenAI, Azure AI Search, Application Insights, Key Vault, and resource group deployment.
+- PowerShell 7 for the Bicep deployment scripts.
+
+## Cost paths
+
+### GitHub Models zero-cost classroom path
+
+Use `INFERENCE_PROVIDER=github_models` as the default path. Learners set `GITHUB_TOKEN`, build a local index, run chat/evaluation locally, and demonstrate agent and MCP integrations without provisioning Azure AI resources.
+
+### Azure path
+
+Use `INFERENCE_PROVIDER=azure_openai` or `INFERENCE_PROVIDER=azure_ai_foundry` for production-oriented labs. Lab X proves the migration by changing configuration only:
+
+```powershell
+$env:INFERENCE_PROVIDER = "azure_ai_foundry"
+$env:AZURE_AI_FOUNDRY_PROJECT_ENDPOINT = "https://<project-endpoint>"
+aiplatform chat "How does Contoso govern AI operations?"
+```
+
+No application code changes are allowed for the provider swap.

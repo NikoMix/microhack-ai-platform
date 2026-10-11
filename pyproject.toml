@@ -1,0 +1,189 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "microhack-aiplatform"
+version = "0.1.0"
+description = "Train-the-Trainer MicroHack for the AI Platform on Microsoft Azure Specialization (Module B). Modular inference over GitHub Models, Azure OpenAI and Azure AI Foundry."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11,<3.14"
+authors = [{ name = "NikoMix and contributors" }]
+keywords = ["azure", "ai-foundry", "openai", "github-models", "rag", "agents", "microhack", "responsible-ai"]
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+# Base runtime supports the ZERO-COST GitHub Models path out of the box.
+dependencies = [
+    "openai>=1.58",
+    "pydantic>=2.10",
+    "pydantic-settings>=2.7",
+    "httpx>=0.28",
+    "tenacity>=9.0",
+    "python-dotenv>=1.0",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "numpy>=2.2",
+    "rich>=13.9",
+]
+
+[project.optional-dependencies]
+# Azure AI Foundry + Azure OpenAI + Azure AI Search (production labs).
+azure = [
+    "azure-identity>=1.19",
+    "azure-ai-inference>=1.0.0b9",
+    "azure-ai-projects>=1.0.0b10",
+    "azure-search-documents>=11.5",
+    "azure-core>=1.32",
+]
+# Evaluation harness (Lab 6 / B.4.1).
+eval = [
+    "azure-ai-evaluation>=1.1",
+    "scikit-learn>=1.6",
+]
+# Responsible AI guardrails (content safety, prompt-injection shields).
+safety = [
+    "azure-ai-contentsafety>=1.0",
+]
+# OpenTelemetry + Azure Monitor (App Insights) telemetry.
+telemetry = [
+    "opentelemetry-api>=1.29",
+    "opentelemetry-sdk>=1.29",
+    "opentelemetry-instrumentation-fastapi>=0.50b0",
+    "azure-monitor-opentelemetry>=1.6",
+]
+# Custom Model Context Protocol (MCP) lab server (WS-AGENTS).
+mcp = [
+    "mcp>=1.2",
+]
+dev = [
+    "ruff>=0.9",
+    "mypy>=1.14",
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "pytest-cov>=6.0",
+    "bandit[toml]>=1.8",
+    "pip-audit>=2.7",
+    "pre-commit>=4.0",
+    "respx>=0.22",
+]
+
+[project.urls]
+Homepage = "https://github.com/NikoMix/microhack-ai-platform"
+Documentation = "https://nikomix.github.io/microhack-ai-platform"
+Repository = "https://github.com/NikoMix/microhack-ai-platform"
+
+[project.scripts]
+aiplatform = "aiplatform.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aiplatform"]
+
+# ---------------------------------------------------------------------------
+# Ruff — lint + format. Comprehensive rule set for clean, telemetry-rich code.
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+extend-exclude = ["docs", "infra", ".venv"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",      # pycodestyle
+    "F",            # pyflakes
+    "I",            # isort
+    "N",            # pep8-naming
+    "UP",           # pyupgrade
+    "B",            # flake8-bugbear (logical bugs)
+    "C4",           # comprehensions
+    "SIM",          # simplify
+    "TID",          # tidy imports
+    "PTH",          # use pathlib
+    "RUF",          # ruff-specific
+    "ASYNC",        # async pitfalls
+    "S",            # flake8-bandit (security)
+    "PL",           # pylint (smells/complexity)
+    "TRY",          # exception anti-patterns
+    "PERF",         # performance
+    "LOG", "G",     # logging correctness
+    "ANN",          # type annotations
+    "D",            # docstrings
+]
+ignore = [
+    "D203", "D213",   # conflicting docstring conventions
+    "ANN401",          # allow typing.Any where justified
+    "PLR0913",         # many args acceptable for provider factories
+    "TRY003",          # allow descriptive exception messages
+]
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "D", "ANN", "PLR2004"]
+"**/__init__.py" = ["D104"]
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel", "pydantic_settings.BaseSettings"]
+
+# ---------------------------------------------------------------------------
+# mypy — strict static typing.
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+no_implicit_reexport = true
+plugins = ["pydantic.mypy"]
+mypy_path = "src"
+packages = ["aiplatform"]
+
+[[tool.mypy.overrides]]
+module = ["azure.*", "agent_framework.*", "mcp.*", "opentelemetry.*", "sklearn.*"]
+ignore_missing_imports = true
+
+# numpy is an optional, dynamically-imported dependency (see rag/local.py, which
+# loads it via importlib and treats it as Any). Skip analysing its stubs: numpy
+# 2.x ships PEP 695 `type` syntax that the 3.11 target rejects, and we never rely
+# on its types statically. follow_imports_for_stubs is required so the skip also
+# applies to numpy's bundled .pyi stub files.
+[[tool.mypy.overrides]]
+module = ["numpy", "numpy.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+ignore_missing_imports = true
+
+# ---------------------------------------------------------------------------
+# pytest + coverage.
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --strict-markers --import-mode=importlib --cov=aiplatform --cov-report=term-missing --cov-report=xml"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "integration: tests that require live Azure or GitHub Models credentials",
+    "slow: long-running tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["aiplatform"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 90
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:", "raise NotImplementedError", "\\.\\.\\."]
+
+# ---------------------------------------------------------------------------
+# Bandit — security static analysis (defense in depth alongside ruff S rules).
+# ---------------------------------------------------------------------------
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "docs"]

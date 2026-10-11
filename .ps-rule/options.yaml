@@ -1,0 +1,12 @@
+configuration:
+  AZURE_BICEP_FILE_EXPANSION: true
+  AZURE_PARAMETER_FILE_EXPANSION: true
+  AZURE_BICEP_PARAMS_FILE_EXPANSION: true
+
+binding:
+  targetName:
+    - name
+    - fullName
+
+execution:
+  unprocessedObject: Ignore

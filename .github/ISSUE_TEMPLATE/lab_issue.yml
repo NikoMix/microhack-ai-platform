@@ -1,0 +1,49 @@
+name: Lab issue
+description: Report a Module B lab/control issue for the Train-the-Trainer MicroHack.
+title: "[Lab]: "
+labels:
+  - lab
+body:
+  - type: dropdown
+    id: control
+    attributes:
+      label: Module B control
+      options:
+        - B.1.1
+        - B.1.2
+        - B.1.3
+        - B.2.1
+        - B.2.2
+        - B.2.3
+        - B.3.1
+        - B.3.2
+        - B.3.3
+        - B.4.1
+        - B.4.2
+    validations:
+      required: true
+  - type: input
+    id: lab
+    attributes:
+      label: Lab or exercise
+      placeholder: "Lab 2: Azure OpenAI inference"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is unclear, broken, or missing?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected trainer or learner experience
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Add screenshots, command output, docs links, or suggested fixes.

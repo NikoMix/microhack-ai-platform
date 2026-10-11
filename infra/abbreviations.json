@@ -1,0 +1,10 @@
+{
+  "applicationInsightsComponents": "appi",
+  "containerApps": "ca",
+  "containerAppsEnvironments": "cae",
+  "cognitiveServicesAccounts": "cog",
+  "logAnalyticsWorkspaces": "log",
+  "managedIdentitiesUserAssignedIdentities": "id",
+  "searchServices": "srch",
+  "storageAccounts": "st"
+}

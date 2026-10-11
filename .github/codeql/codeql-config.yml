@@ -1,0 +1,14 @@
+name: microhack-codeql
+
+paths:
+  - src
+  - docs
+
+paths-ignore:
+  - docs/dist
+  - .venv
+  - .ruff_cache
+  - infra
+
+queries:
+  - uses: security-and-quality
